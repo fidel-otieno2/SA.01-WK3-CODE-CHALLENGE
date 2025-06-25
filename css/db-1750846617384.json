@@ -1,0 +1,18 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "Welcome Post",
+      "content": "This is your first post!",
+      "author": "Admin",
+      "image": "https://images.firstpost.com/uploads/2024/07/Argentina-NT-Copa-America-AP-1200-2024-07-7b9d7aaec70ddbdacf1d345c2a79eb0d.jpg?im=Resize,width=720,aspect=fit,type=normal"
+    },
+    {
+      "id": 2,
+      "title": "Second Post",
+      "content": "Here is another post.",
+      "author": "User",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTR8zSeLr1CpFHLYSahYWuXhjfSS6Xr0Se5Tw&s"
+    }
+  ]
+}

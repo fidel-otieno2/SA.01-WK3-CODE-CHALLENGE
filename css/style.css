@@ -1,0 +1,308 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-image: url(https://www.google.com/imgres?q=argentina%20national%20football%20team&imgurl=https%3A%2F%2Frukminim2.flixcart.com%2Fimage%2F1100%2F1300%2Fkxgfzbk0%2Fwall-decoration%2Fi%2F5%2Fs%2Fsoccer-lionel-messi-argentina-national-football-team-hd-original-imag9wjxbwssvhmg.jpeg%3Fq%3D90%26crop%3Dfalse&imgrefurl=https%3A%2F%2Fwww.flipkart.com%2Fhi%2Fsmoky-design-soccer-lionel-messi-argentina-national-football-team-hd-wallpaper-paper-poster%2Fp%2Fitm2f655551dea84&docid=2yPVZRoUnNWJhM&tbnid=-kJ7op2axc_YtM&vet=12ahUKEwiytfzXoYyOAxWjKvsDHcrjHDgQM3oECCEQAA..i&w=1100&h=753&hcb=2&ved=2ahUKEwiytfzXoYyOAxWjKvsDHcrjHDgQM3oECCEQAA);
+  color: white;
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#container {
+  width: 100%;
+  max-width: 1200px;
+  background: #001f4d;
+  border: 5px solid orange;
+  border-radius: 10px;
+  padding: 2rem;
+  animation: pulse 2s infinite;
+}
+
+h1 {
+  text-align: center;
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  color: yellow;
+}
+
+#main {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+#post-list {
+  width: 30%;
+  background-color: #e60000;
+  padding: 1rem;
+  border-radius: 10px;
+  min-height: 300px;
+  overflow-y: auto;
+}
+
+#post-list div {
+  background-color: #ffcc00;
+  color: black;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+#post-list div:hover {
+  background-color: #ffa500;
+}
+
+#post-detail {
+  width: 70%;
+  background-color: #009933;
+  padding: 2rem;
+  border-radius: 10px;
+  color: white;
+  min-height: 500px;
+}
+
+#post-detail h2 {
+  color: purple;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+#post-detail p {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+#post-detail img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
+#edit-btn {
+  background-color: purple;
+  color: white;
+}
+
+#delete-btn {
+  background-color: black;
+  color: white;
+}
+
+#new-post-form,
+#edit-post-form {
+  margin-top: 2rem;
+  background-color: #6600cc;
+  padding: 2rem;
+  border-radius: 10px;
+  color: white;
+}
+
+#new-post-form h4,
+#edit-post-form h4 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: yellow;
+}
+
+#new-post-form input,
+#new-post-form textarea,
+#edit-post-form input,
+#edit-post-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+#new-post-form button,
+#edit-post-form button {
+  background-color: orange;
+  color: black;
+  font-weight: bold;
+}
+
+#cancel-edit {
+  background-color: red;
+  color: white;
+}
+
+.hidden {
+  display: none;
+}
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@media (max-width: 768px) {}
+  #main {
+    flex-direction: column;
+  }
+  #post-list {
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+  #post-detail {
+    width: 100%;
+  }
+  #container {
+    padding: 1rem;
+  }
+  h1 {
+    font-size: 2.5rem;
+  }
+  #post-list div {
+    font-size: 1rem;
+  }
+  #post-detail h2 {
+    font-size: 1.5rem;
+  }
+  #post-detail p {
+    font-size: 1rem;
+  }
+  #new-post-form h4,
+  #edit-post-form h4 {
+    font-size: 1.2rem;
+  }
+  #new-post-form input,
+  #new-post-form textarea,
+  #edit-post-form input,
+  #edit-post-form textarea {
+    font-size: 0.9rem;
+  }
+  button {
+    font-size: 0.9rem;
+  }
+  #edit-btn,
+  #delete-btn,
+  #cancel-edit {
+    padding: 0.5rem 1rem;
+  }
+  #new-post-form button,
+  #edit-post-form button {
+    padding: 0.5rem 1rem;
+  }
+  #new-post-form input,
+  #new-post-form textarea,
+  #edit-post-form input,
+  #edit-post-form textarea {
+    padding: 0.5rem;
+  }
+  #new-post-form button,
+  #edit-post-form button {
+    width: 100%;
+    margin-top: 1rem;
+  }
+  #cancel-edit {
+    width: 100%;
+    margin-top: 1rem;
+  }
+  #post-detail img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+  #post-detail p {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+  #post-detail h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  #post-list div {
+    font-size: 1rem;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  #post-list {
+    padding: 0.5rem;
+    min-height: 200px;
+  }
+  #container {
+    padding: 1rem;
+    border: 3px solid orange;
+    border-radius: 8px;
+    animation: pulse 3s infinite;
+  }
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: yellow;
+  }
+  #main {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  #post-detail {
+    padding: 1rem;
+    min-height: 300px;
+  }
+  #post-detail h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  #post-detail p {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+  #post-detail img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 0.5rem;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+  }
+  #edit-btn {
+    background-color: purple;
+    color: white;
+  }
+  #delete-btn {
+    background-color: black;
+    color: white;
+  }
+  #new-post-form,
+  #edit-post-form {
+    margin-top: 1rem;
+    background-color: #6600cc;
+    padding: 1rem;
+    border-radius: 8px;
+    color: white;
+  }

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blog Posts</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em;}
+    #post-list > div { margin-bottom: 1em; border-bottom: 1px solid #ccc; padding-bottom: 1em; }
+    img { border-radius: 8px; }
+    .hidden { display: none; }
+    form { margin-bottom: 2em; }
+    input, textarea { display: block; margin-bottom: 1em; width: 100%; max-width: 400px; }
+    button { margin-right: 1em; }
+    
+  </style>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body style="background-color: aqua;background-image: url(https://www.google.com/imgres?q=argentina%20national%20football%20team&imgurl=https%3A%2F%2Frukminim2.flixcart.com%2Fimage%2F1100%2F1300%2Fkxgfzbk0%2Fwall-decoration%2Fi%2F5%2Fs%2Fsoccer-lionel-messi-argentina-national-football-team-hd-original-imag9wjxbwssvhmg.jpeg%3Fq%3D90%26crop%3Dfalse&imgrefurl=https%3A%2F%2Fwww.flipkart.com%2Fhi%2Fsmoky-design-soccer-lionel-messi-argentina-national-football-team-hd-wallpaper-paper-poster%2Fp%2Fitm2f655551dea84&docid=2yPVZRoUnNWJhM&tbnid=-kJ7op2axc_YtM&vet=12ahUKEwiytfzXoYyOAxWjKvsDHcrjHDgQM3oECCEQAA..i&w=1100&h=753&hcb=2&ved=2ahUKEwiytfzXoYyOAxWjKvsDHcrjHDgQM3oECCEQAA);">
+  <h1>Blog Posts</h1>
+
+  <!-- New Post Form -->
+  <form id="new-post-form">
+    <input id="new-title" placeholder="Title" required />
+    <input id="new-author" placeholder="Author" required />
+    <textarea id="new-content" placeholder="Content" required></textarea>
+    <input id="new-image" placeholder="Image URL" />
+    <input id="image-query" placeholder="Search for image..." />
+    <button type="button" id="fetch-image-btn">Fetch Image</button>
+    <button type="submit">Add Post</button>
+  </form>
+
+  <!-- Edit Post Form -->
+  <form id="edit-post-form" class="hidden">
+    <input id="edit-title" placeholder="Title" required />
+    <textarea id="edit-content" placeholder="Content" required></textarea>
+    <input id="edit-image" placeholder="Image URL" />
+    <button type="submit">Save</button>
+    <button type="button" id="cancel-edit">Cancel</button>
+  </form>
+
+  <!-- Posts List -->
+  <div id="post-list"></div>
+
+  <!-- Post Detail -->
+  <div id="post-detail"></div>
+
+  <script src="src/index.js"></script>
+</body>
+</html>
