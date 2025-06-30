@@ -1,5 +1,5 @@
-const API_URL = 'http://localhost:3000/posts';
-const unsplashKey = 'YOUR_UNSPLASH_ACCESS_KEY'; // Replace with your Unsplash API key
+const API_URL = 'http://localhost:3000/posts'; // Ensure your server is running locally or update this for production
+const unsplashKey = 'your_actual_unsplash_key_here'; // Replace with your Unsplash API key
 
 document.addEventListener("DOMContentLoaded", main);
 
@@ -17,19 +17,27 @@ function displayPosts() {
     .then(res => res.json())
     .then(posts => {
       postListDiv.innerHTML = "";
-      posts.forEach(post => {
-        const postItem = document.createElement("div");
-        postItem.innerHTML = `
-          ${post.image ? `<img src="${post.image}" alt="" style="width:300px;height:300px;object-fit:cover;margin-right:8px;">` : ""}
-          <span>${post.title}</span>
-        `;
-        postItem.style.display = "flex";
-        postItem.style.alignItems = "center";
-        postItem.style.cursor = "pointer";
-        postItem.addEventListener("click", () => handlePostClick(post.id));
-        postListDiv.appendChild(postItem);
-      });
-      if (posts.length) handlePostClick(posts[0].id);
+      if (posts.length === 0) {
+        postListDiv.innerHTML = "<p>No posts available.</p>";
+      } else {
+        posts.forEach(post => {
+          const postItem = document.createElement("div");
+          postItem.innerHTML = `
+            ${post.image ? `<img src="${post.image}" alt="" style="width:300px;height:300px;object-fit:cover;margin-right:8px;">` : ""}
+            <span>${post.title}</span>
+          `;
+          postItem.style.display = "flex";
+          postItem.style.alignItems = "center";
+          postItem.style.cursor = "pointer";
+          postItem.addEventListener("click", () => handlePostClick(post.id));
+          postListDiv.appendChild(postItem);
+        });
+        handlePostClick(posts[0].id); // Automatically show the first post's details
+      }
+    })
+    .catch(error => {
+      console.error("Error fetching posts:", error);
+      postListDiv.innerHTML = "<p>Error fetching posts. Please try again later.</p>";
     });
 }
 
@@ -47,6 +55,10 @@ function handlePostClick(id) {
       `;
       document.getElementById("edit-btn").addEventListener("click", () => openEditForm(post));
       document.getElementById("delete-btn").addEventListener("click", () => deletePost(post.id));
+    })
+    .catch(error => {
+      console.error("Error fetching post details:", error);
+      postDetailDiv.innerHTML = "<p>Error fetching post details. Please try again later.</p>";
     });
 }
 
@@ -66,7 +78,11 @@ function addNewPostListener() {
     })
       .then(() => {
         displayPosts();
-        e.target.reset();
+        e.target.reset(); // Reset the form
+      })
+      .catch(error => {
+        console.error("Error adding new post:", error);
+        alert("Error adding new post. Please try again.");
       });
   });
 }
@@ -78,6 +94,7 @@ function openEditForm(post) {
   document.getElementById("edit-content").value = post.content;
   document.getElementById("edit-image").value = post.image || "";
 
+  // Reset any previous submit listener to avoid duplicate bindings
   form.onsubmit = function (e) {
     e.preventDefault();
     const updatedPost = {
@@ -89,11 +106,16 @@ function openEditForm(post) {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedPost)
-    }).then(() => {
-      form.classList.add("hidden");
-      displayPosts();
-      handlePostClick(post.id);
-    });
+    })
+      .then(() => {
+        form.classList.add("hidden");
+        displayPosts();
+        handlePostClick(post.id);
+      })
+      .catch(error => {
+        console.error("Error updating post:", error);
+        alert("Error updating post. Please try again.");
+      });
   };
 
   document.getElementById("cancel-edit").onclick = () => {
@@ -106,6 +128,10 @@ function deletePost(id) {
     .then(() => {
       displayPosts();
       postDetailDiv.innerHTML = "<p>Select a post to see details</p>";
+    })
+    .catch(error => {
+      console.error("Error deleting post:", error);
+      alert("Error deleting post. Please try again.");
     });
 }
 
@@ -115,8 +141,8 @@ function addImageFetcher() {
     fetch(`https://api.unsplash.com/photos/random?query=${encodeURIComponent(query)}&client_id=${unsplashKey}`)
       .then(res => res.json())
       .then(data => {
-        if (data.urls && data.urls.small) {
-          document.getElementById("new-image").value = data.urls.small;
+        if (data && data[0] && data[0].urls && data[0].urls.small) {
+          document.getElementById("new-image").value = data[0].urls.small;
         } else {
           alert("No image found for this query.");
         }
