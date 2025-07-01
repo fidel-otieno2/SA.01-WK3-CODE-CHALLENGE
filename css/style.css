@@ -306,3 +306,6 @@ button {
     border-radius: 8px;
     color: white;
   }
+  .hidden {
+  display: none;
+}

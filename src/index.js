@@ -1,5 +1,4 @@
-const API_URL = 'http://localhost:3000/posts'; // Ensure your server is running locally or update this for production
-const unsplashKey = 'your_actual_unsplash_key_here'; // Replace with your Unsplash API key
+const unsplashKey = 'your_unsplash_api_key_here';
 
 document.addEventListener("DOMContentLoaded", main);
 
@@ -12,78 +11,67 @@ function main() {
   addImageFetcher();
 }
 
+function getPosts() {
+  const posts = JSON.parse(localStorage.getItem('posts')) || [];
+  return posts;
+}
+
+function savePosts(posts) {
+  localStorage.setItem('posts', JSON.stringify(posts));
+}
+
 function displayPosts() {
-  fetch(API_URL)
-    .then(res => res.json())
-    .then(posts => {
-      postListDiv.innerHTML = "";
-      if (posts.length === 0) {
-        postListDiv.innerHTML = "<p>No posts available.</p>";
-      } else {
-        posts.forEach(post => {
-          const postItem = document.createElement("div");
-          postItem.innerHTML = `
-            ${post.image ? `<img src="${post.image}" alt="" style="width:300px;height:300px;object-fit:cover;margin-right:8px;">` : ""}
-            <span>${post.title}</span>
-          `;
-          postItem.style.display = "flex";
-          postItem.style.alignItems = "center";
-          postItem.style.cursor = "pointer";
-          postItem.addEventListener("click", () => handlePostClick(post.id));
-          postListDiv.appendChild(postItem);
-        });
-        handlePostClick(posts[0].id); // Automatically show the first post's details
-      }
-    })
-    .catch(error => {
-      console.error("Error fetching posts:", error);
-      postListDiv.innerHTML = "<p>Error fetching posts. Please try again later.</p>";
+  const posts = getPosts();
+  postListDiv.innerHTML = "";
+  if (posts.length === 0) {
+    postListDiv.innerHTML = "<p>No posts available.</p>";
+  } else {
+    posts.forEach(post => {
+      const div = document.createElement("div");
+      div.innerHTML = `
+        ${post.image ? `<img src="${post.image}" alt="" style="width:300px;height:300px;object-fit:cover;margin-right:8px;">` : ""}
+        <span>${post.title}</span>
+      `;
+      div.style.display = "flex";
+      div.style.alignItems = "center";
+      div.style.cursor = "pointer";
+      div.addEventListener("click", () => handlePostClick(post.id));
+      postListDiv.appendChild(div);
     });
+    handlePostClick(posts[0].id);
+  }
 }
 
 function handlePostClick(id) {
-  fetch(`${API_URL}/${id}`)
-    .then(res => res.json())
-    .then(post => {
-      postDetailDiv.innerHTML = `
-        <h2>${post.title}</h2>
-        ${post.image ? `<img src="${post.image}" alt="Image for ${post.title}" style="max-width:400px;">` : ""}
-        <p>${post.content}</p>
-        <p><em>By ${post.author}</em></p>
-        <button id="edit-btn">Edit</button>
-        <button id="delete-btn">Delete</button>
-      `;
-      document.getElementById("edit-btn").addEventListener("click", () => openEditForm(post));
-      document.getElementById("delete-btn").addEventListener("click", () => deletePost(post.id));
-    })
-    .catch(error => {
-      console.error("Error fetching post details:", error);
-      postDetailDiv.innerHTML = "<p>Error fetching post details. Please try again later.</p>";
-    });
+  const posts = getPosts();
+  const post = posts.find(p => p.id === id);
+  postDetailDiv.innerHTML = `
+    <h2>${post.title}</h2>
+    ${post.image ? `<img src="${post.image}" alt="Image for ${post.title}" style="max-width:400px;">` : ""}
+    <p>${post.content}</p>
+    <p><em>By ${post.author}</em></p>
+    <button id="edit-btn">Edit</button>
+    <button id="delete-btn">Delete</button>
+  `;
+  document.getElementById("edit-btn").onclick = () => openEditForm(post);
+  document.getElementById("delete-btn").onclick = () => deletePost(post.id);
 }
 
 function addNewPostListener() {
   document.getElementById("new-post-form").addEventListener("submit", e => {
     e.preventDefault();
     const newPost = {
+      id: Date.now(),
       title: document.getElementById("new-title").value,
       content: document.getElementById("new-content").value,
       author: document.getElementById("new-author").value,
       image: document.getElementById("new-image").value
     };
-    fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newPost)
-    })
-      .then(() => {
-        displayPosts();
-        e.target.reset(); // Reset the form
-      })
-      .catch(error => {
-        console.error("Error adding new post:", error);
-        alert("Error adding new post. Please try again.");
-      });
+    const posts = getPosts();
+    posts.push(newPost);
+    savePosts(posts);
+    displayPosts();
+    e.target.reset();
   });
 }
 
@@ -94,28 +82,19 @@ function openEditForm(post) {
   document.getElementById("edit-content").value = post.content;
   document.getElementById("edit-image").value = post.image || "";
 
-  // Reset any previous submit listener to avoid duplicate bindings
-  form.onsubmit = function (e) {
+  form.onsubmit = e => {
     e.preventDefault();
-    const updatedPost = {
+    const updated = {
+      id: post.id,
       title: document.getElementById("edit-title").value,
       content: document.getElementById("edit-content").value,
       image: document.getElementById("edit-image").value
     };
-    fetch(`${API_URL}/${post.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updatedPost)
-    })
-      .then(() => {
-        form.classList.add("hidden");
-        displayPosts();
-        handlePostClick(post.id);
-      })
-      .catch(error => {
-        console.error("Error updating post:", error);
-        alert("Error updating post. Please try again.");
-      });
+    const posts = getPosts().map(p => p.id === post.id ? updated : p);
+    savePosts(posts);
+    form.classList.add("hidden");
+    displayPosts();
+    handlePostClick(post.id);
   };
 
   document.getElementById("cancel-edit").onclick = () => {
@@ -124,32 +103,34 @@ function openEditForm(post) {
 }
 
 function deletePost(id) {
-  fetch(`${API_URL}/${id}`, { method: "DELETE" })
-    .then(() => {
-      displayPosts();
-      postDetailDiv.innerHTML = "<p>Select a post to see details</p>";
-    })
-    .catch(error => {
-      console.error("Error deleting post:", error);
-      alert("Error deleting post. Please try again.");
-    });
+  const posts = getPosts().filter(p => p.id !== id);
+  savePosts(posts);
+  displayPosts();
+  postDetailDiv.innerHTML = "<p>Select a post to see details</p>";
 }
 
 function addImageFetcher() {
-  document.getElementById("fetch-image-btn").addEventListener("click", () => {
-    const query = document.getElementById("image-query").value;
-    fetch(`https://api.unsplash.com/photos/random?query=${encodeURIComponent(query)}&client_id=${unsplashKey}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data && data[0] && data[0].urls && data[0].urls.small) {
-          document.getElementById("new-image").value = data[0].urls.small;
-        } else {
-          alert("No image found for this query.");
-        }
-      })
-      .catch(err => {
-        alert("Error fetching image.");
-        console.error("Error fetching image:", err);
-      });
-  });
+  document
+    .getElementById("fetch-image-btn")
+    .addEventListener("click", () => {
+      const query = document.getElementById("image-query").value.trim();
+      const url = `https://api.unsplash.com/photos/random?query=${encodeURIComponent(query)}&client_id=${unsplashKey}`;
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          // Unsplash returns an object, not an array
+          if (data.urls && data.urls.small) {
+            document.getElementById("new-image").value = data.urls.small;
+          } else {
+            alert("No image found for this query.");
+          }
+        }) // closes .then(data => { … })
+        .catch(err => { // added catch for errors
+          console.error("Error fetching image:", err);
+          alert("Error fetching image. Check console.");
+        });
+    }); // closes addEventListener
 }
+
+
+ 
